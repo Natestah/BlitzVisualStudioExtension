@@ -123,14 +123,7 @@ namespace BlitzVisualStudio
 			dte.ItemOperations.OpenFile(file);
 			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(line, column+1);
 		}
-
-		private string GetPoorMansIPCPath()
-		{
-			string envAppData = Environment.GetEnvironmentVariable("APPDATA");
-			return Path.Combine(envAppData, "NathanSilvers", "POORMANS_IPC");
-
-		}
-
+		 
 		/// <summary>
 		/// This function is the callback used to execute the command when the menu item is clicked.
 		/// See the constructor to see how the menu item is associated with this function using
@@ -178,7 +171,7 @@ namespace BlitzVisualStudio
 						OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 				}
 
-				string userPath = Path.Combine(envAppData,"NathanSilvers", "POORMANS_IPC");
+				string userPath = PoorMansIPC.Instance.GetPoorMansIPCPath();
 				Directory.CreateDirectory(userPath);
 
 				string fullPath = Path.Combine(userPath, "SET_SEARCH.txt");

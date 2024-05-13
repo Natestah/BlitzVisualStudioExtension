@@ -14,7 +14,7 @@ namespace BlitzVisualStudio
 		public PoorMansIPC()
 		{
 			var folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var specificFolder = Path.Combine(folder, "NathanSilvers", "POORMANS_IPC");
+			var specificFolder = GetPoorMansIPCPath(); 
 			Directory.CreateDirectory(specificFolder);
 
 			var watcher = new FileSystemWatcher(specificFolder, "*");
@@ -24,6 +24,13 @@ namespace BlitzVisualStudio
 			watcher.Deleted += WatcherOnDeleted;
 			watcher.Changed += WatcherOnChanged;
 			_fileSystemWatcher = watcher;
+		}
+
+		public string GetPoorMansIPCPath()
+		{
+			string envAppData = Environment.GetEnvironmentVariable("APPDATA");
+			return Path.Combine(envAppData, "NathanSilvers", "POORMANS_IPC");
+
 		}
 
 		public void RegisterAction(string name, Action<string> action) => _actions[name] = action;

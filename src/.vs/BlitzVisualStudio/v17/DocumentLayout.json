@@ -1,0 +1,223 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\git\\BlitzVisualStudioExtension\\src\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|BlitzVisualStudio||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\source.extension.vsixmanifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\source.extension.vsixmanifest||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\blitzvisualstudiopackage.vsct||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\blitzvisualstudiopackage.vsct||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\resources\\blitzsmallpng.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\resources\\blitzsmallpng.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\blitzicon.ico||{177559E0-D141-11D0-92DF-00A0C9138C45}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\blitzicon.ico||{177559E0-D141-11D0-92DF-00A0C9138C45}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\resources\\blitzsearchthis.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\resources\\blitzsearchthis.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\newblitzpng.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\newblitzpng.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\blitzsearchthis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\blitzsearchthis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\blitzvisualstudiopackage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\blitzvisualstudiopackage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|C:\\git\\BlitzVisualStudioExtension\\src\\blitzvisualstudio\\poormansipc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|solutionrelative:blitzvisualstudio\\poormansipc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\git\\blits_private\\src\\Blitz.Avalonia.Controls\\Models\\BlitzMainPanel.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\git\\Blitz\\Blitz.Files\\IgnorePath.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\git\\blits_private\\src\\Blitz.Files\\IgnorePath.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E020AB6F-C25D-427F-B1ED-752653276B58}|BlitzVisualStudio\\BlitzVisualStudio.csproj|c:\\git\\blitzvisualstudioextension\\src\\blitzvisualstudio\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|5e9a8ac2-4f34-4521-858f-4c248ba31532"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 12,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "source.extension.vsixmanifest",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\source.extension.vsixmanifest",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\source.extension.vsixmanifest",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\source.extension.vsixmanifest",
+              "RelativeToolTip": "BlitzVisualStudio\\source.extension.vsixmanifest",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2024-05-13T17:41:23.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BlitzIcon.ico - Icon [762x763, 32 bit, BMP]",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzIcon.ico",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\BlitzIcon.ico",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzIcon.ico - Icon [762x763, 32 bit, BMP]",
+              "RelativeToolTip": "BlitzVisualStudio\\BlitzIcon.ico - Icon [762x763, 32 bit, BMP]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001525|",
+              "WhenOpened": "2024-05-13T17:33:11.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BlitzSearchThis.png",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\Resources\\BlitzSearchThis.png",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\Resources\\BlitzSearchThis.png",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\Resources\\BlitzSearchThis.png",
+              "RelativeToolTip": "BlitzVisualStudio\\Resources\\BlitzSearchThis.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2024-05-13T17:33:07.228Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BlitzSmallPNG.png",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\Resources\\BlitzSmallPNG.png",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\Resources\\BlitzSmallPNG.png",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\Resources\\BlitzSmallPNG.png",
+              "RelativeToolTip": "BlitzVisualStudio\\Resources\\BlitzSmallPNG.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2024-05-13T17:33:06.115Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "NewBlitzPng.png",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\NewBlitzPng.png",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\NewBlitzPng.png",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\NewBlitzPng.png",
+              "RelativeToolTip": "BlitzVisualStudio\\NewBlitzPng.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2024-05-13T17:32:50.23Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BlitzVisualStudioPackage.vsct",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudioPackage.vsct",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\BlitzVisualStudioPackage.vsct",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudioPackage.vsct",
+              "RelativeToolTip": "BlitzVisualStudio\\BlitzVisualStudioPackage.vsct",
+              "ViewState": "AQIAABUAAAAAAAAAAAApwCwAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2024-05-13T17:25:18.117Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BlitzVisualStudioPackage.cs",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudioPackage.cs",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\BlitzVisualStudioPackage.cs",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudioPackage.cs",
+              "RelativeToolTip": "BlitzVisualStudio\\BlitzVisualStudioPackage.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADQAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-13T17:13:45.982Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PoorMansIPC.cs",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\PoorMansIPC.cs",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\PoorMansIPC.cs",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\PoorMansIPC.cs",
+              "RelativeToolTip": "BlitzVisualStudio\\PoorMansIPC.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACkAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-13T17:03:38.957Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BlitzSearchThis.cs",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzSearchThis.cs",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\BlitzSearchThis.cs",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzSearchThis.cs",
+              "RelativeToolTip": "BlitzVisualStudio\\BlitzSearchThis.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAuwDAAAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-13T17:02:11.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BlitzMainPanel.axaml.cs",
+              "DocumentMoniker": "C:\\git\\blits_private\\src\\Blitz.Avalonia.Controls\\Models\\BlitzMainPanel.axaml.cs",
+              "RelativeDocumentMoniker": "..\\..\\blits_private\\src\\Blitz.Avalonia.Controls\\Models\\BlitzMainPanel.axaml.cs",
+              "ToolTip": "C:\\git\\blits_private\\src\\Blitz.Avalonia.Controls\\Models\\BlitzMainPanel.axaml.cs",
+              "RelativeToolTip": "..\\..\\blits_private\\src\\Blitz.Avalonia.Controls\\Models\\BlitzMainPanel.axaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-13T17:02:04.394Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IgnorePath.cs",
+              "DocumentMoniker": "C:\\git\\Blitz\\Blitz.Files\\IgnorePath.cs",
+              "RelativeDocumentMoniker": "..\\..\\Blitz\\Blitz.Files\\IgnorePath.cs",
+              "ToolTip": "C:\\git\\Blitz\\Blitz.Files\\IgnorePath.cs",
+              "RelativeToolTip": "..\\..\\Blitz\\Blitz.Files\\IgnorePath.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC4AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-12T16:02:07.747Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IgnorePath.cs",
+              "DocumentMoniker": "C:\\git\\blits_private\\src\\Blitz.Files\\IgnorePath.cs",
+              "RelativeDocumentMoniker": "..\\..\\blits_private\\src\\Blitz.Files\\IgnorePath.cs",
+              "ToolTip": "C:\\git\\blits_private\\src\\Blitz.Files\\IgnorePath.cs",
+              "RelativeToolTip": "..\\..\\blits_private\\src\\Blitz.Files\\IgnorePath.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-12T16:02:03.844Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BlitzVisualStudio",
+              "DocumentMoniker": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudio.csproj",
+              "RelativeDocumentMoniker": "BlitzVisualStudio\\BlitzVisualStudio.csproj",
+              "ToolTip": "C:\\git\\BlitzVisualStudioExtension\\src\\BlitzVisualStudio\\BlitzVisualStudio.csproj",
+              "RelativeToolTip": "BlitzVisualStudio\\BlitzVisualStudio.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-05-12T15:30:12.284Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
