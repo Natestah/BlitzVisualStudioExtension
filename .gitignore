@@ -8,3 +8,10 @@ riderModule.iml
 *.idea
 *Dotsettings.user
 .git/
+.vs/
+src/.vs/
+.suo
+src/.vs/BlitzVisualStudio/v17/DocumentLayout.json
+src/.vs/BlitzVisualStudio/v17/.suo
+src/.vs/BlitzVisualStudio/FileContentIndex/7ca5546e-e48d-432b-bf6b-8c52e503a0a0.vsidx
+src/.vs/BlitzVisualStudio/FileContentIndex/70d4805a-bc5d-4261-9075-84ec592c1436.vsidx

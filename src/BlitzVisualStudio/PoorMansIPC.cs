@@ -13,7 +13,6 @@ namespace BlitzVisualStudio
 		private FileSystemWatcher _fileSystemWatcher;
 		public PoorMansIPC()
 		{
-			var folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			var specificFolder = GetPoorMansIPCPath(); 
 			Directory.CreateDirectory(specificFolder);
 

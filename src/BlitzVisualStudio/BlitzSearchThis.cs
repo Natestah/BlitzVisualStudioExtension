@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
 using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.IO;
@@ -14,11 +15,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace BlitzVisualStudio
 {
-	/// <summary>
+		/// <summary>
 	/// Command handler
 	/// </summary>
 	internal sealed class BlitzSearchThis
 	{
+
 		/// <summary>
 		/// Command ID.
 		/// </summary>
@@ -60,16 +62,19 @@ namespace BlitzVisualStudio
 			private set;
 		}
 
-		/// <summary>
-		/// Gets the service provider from the owner package.
-		/// </summary>
-		private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
-		{
-			get
-			{
-				return this.package;
-			}
-		}
+		///// <summary>
+		///// Gets the service provider from the owner package.
+		///// </summary>
+		//private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
+		//{
+		//	get
+		//	{
+		//		return this.package;
+		//	}
+		//}
+
+		[Import]
+		internal SVsServiceProvider ServiceProvider = null;
 
 		/// <summary>
 		/// Initializes the singleton instance of the command.
@@ -118,12 +123,19 @@ namespace BlitzVisualStudio
 				column = 1;
 			}
 
+			if( !File.Exists(file) ) 
+			{ 
+				return; 
+			}
+
 			var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
+			//var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
 			dte.MainWindow.Activate();
 			dte.ItemOperations.OpenFile(file);
 			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(line, column+1);
 		}
-		 
+
+	
 		/// <summary>
 		/// This function is the callback used to execute the command when the menu item is clicked.
 		/// See the constructor to see how the menu item is associated with this function using
@@ -157,7 +169,6 @@ namespace BlitzVisualStudio
 				}
 
 				string envProgramFiles = Environment.GetEnvironmentVariable("PROGRAMFILES");
-				string envAppData =  Environment.GetEnvironmentVariable("APPDATA");
 				string blitzPath = Path.Combine(envProgramFiles, "Blitz", "Blitz.exe");
 				if( !File.Exists(blitzPath))
 				{
