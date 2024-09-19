@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.4" Language="en-US" Publisher="Nathan Silvers" />
+        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.8" Language="en-US" Publisher="Nathan Silvers" />
         <DisplayName>Blitz Search</DisplayName>
-        <Description xml:space="preserve">Blitz Search Tool is a Dedicated External utility with a focused effort on finding-in-files and filenames.  
-Features:
-* Fast search and discovery
-* Simple words-on-a-line query
-* Syntax highlighting in results
-* Real time results updating as you type
-* Results update to reflect changes to files
-* Work without the weight of IDE workspace
-* Work in any IDE or text editor
-* Ignore files spec'd by .gitignore
-* Its nice to search wider aiming an entire instance of an IDE at a folder.
-* words on a line, in any order is difficult to regular expression..
-        
-        </Description>
+        <Description xml:space="preserve">A dialog based search tool, it aims to be a full replacement for Find-in-Files And Replace in files.  It offers full syntax highlighting, Real Time updates, and handy target sets. While Blitz Search offers parity with "Literal Search" and "Regular Expression" search, it's default mode is it's own expression "Words on a line" that matches words on a line in any order. Blitz Search is a universal stand alone executable that will also work with Visual Studio Code and other Code Editors.</Description>
         <MoreInfo>https://natestah.com</MoreInfo>
         <GettingStartedGuide>https://natestah.com</GettingStartedGuide>
-        <ReleaseNotes>First release</ReleaseNotes>
+        <ReleaseNotes>Updating Description</ReleaseNotes>
         <Icon>BlitzIcon.ico</Icon>
         <PreviewImage>NewBlitzPng.png</PreviewImage>
+        <Tags>Code Search Replace Text Tool</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">

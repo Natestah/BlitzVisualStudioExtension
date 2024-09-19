@@ -1,8 +1,13 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.IO;
+using System.IO.Packaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Package = Microsoft.VisualStudio.Shell.Package;
 using Task = System.Threading.Tasks.Task;
 
 namespace BlitzVisualStudio
@@ -32,6 +37,11 @@ namespace BlitzVisualStudio
 	public sealed class BlitzVisualStudioPackage : AsyncPackage
 	{
 		/// <summary>
+		/// Command menu group (command set GUID).
+		/// </summary>
+		public static readonly Guid CommandSet = new Guid("b838b65e-b0f4-4106-aa88-e936bf0b2e0c");
+
+		/// <summary>
 		/// BlitzVisualStudioPackage GUID string.
 		/// </summary>
 		public const string PackageGuidString = "310f1a03-8e3d-40ed-8fd2-92ba9aa31ec2";
@@ -50,7 +60,111 @@ namespace BlitzVisualStudio
 			// When initialized asynchronously, the current thread may be a background thread at this point.
 			// Do any initialization that requires the UI thread after switching to the UI thread.
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-		    await BlitzSearchThis.InitializeAsync(this);
+			await BlitzSearchThis.InitializeAsync(this);
+			await BlitzReplaceThis.InitializeAsync(this);
+			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO", Goto);
+		}
+
+		/// <summary>
+		/// Sets Blitz Search Executable to Search for the active selection or automatic word under the caret.
+		/// </summary>
+		/// <param name="title">Identity for Error Context</param>
+		/// <param name="commandName">Command string, this is the file that is Used for Poormans IPC ( SET_SEARCH, SET_REPLACE )</param>
+		public void SendSearchContext(string title, string commandName)
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+
+			var dte = GetGlobalService(typeof(DTE)) as DTE2;
+
+			if (dte.ActiveDocument == null)
+			{
+				return;
+			}
+			var selection = (TextSelection)dte.ActiveDocument.Selection;
+			string text = selection.Text;
+			if (string.IsNullOrEmpty(text))
+			{
+				if (selection.IsEmpty)
+				{
+					selection.WordLeft(false);
+					selection.WordRight(true);
+				}
+				text = selection.Text;
+				if (!string.IsNullOrEmpty(text))
+				{
+					if (text.ToLower().Equals(text))
+					{
+						text = $"^@{text}";
+					}
+					else
+					{
+						text = $"@{text}";
+					}
+				}
+			}
+
+			string envProgramFiles = Environment.GetEnvironmentVariable("PROGRAMFILES");
+			string blitzPath = Path.Combine(envProgramFiles, "Blitz", "Blitz.exe");
+			if (!File.Exists(blitzPath))
+			{
+				// Show a message box to prove we were here
+				VsShellUtilities.ShowMessageBox(
+					this,
+					"Failed To locate Blitz.exe, please visit https://natestah.com to download",
+					title,
+					OLEMSGICON.OLEMSGICON_INFO,
+					OLEMSGBUTTON.OLEMSGBUTTON_OK,
+					OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+			}
+
+			string userPath = PoorMansIPC.Instance.GetPoorMansIPCPath();
+			Directory.CreateDirectory(userPath);
+
+			string fullPath = Path.Combine(userPath, $"{commandName}.txt");
+			File.WriteAllText(fullPath, text);
+			System.Diagnostics.Process.Start(blitzPath);
+		}
+		private async void Goto(string gotoCommand)
+		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(this.DisposalToken);
+			var splitString = gotoCommand.Split(',');
+			if (splitString.Length != 3)
+			{
+				// Show a message box to prove we were here
+				VsShellUtilities.ShowMessageBox(
+					this,
+					"Failed To Parse command from VISUAL_STUDIO_GOTO, must be 'file,lineNumber,column'",
+					"Goto Failure",
+					OLEMSGICON.OLEMSGICON_INFO,
+					OLEMSGBUTTON.OLEMSGBUTTON_OK,
+					OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+				return;
+			}
+
+			string file = splitString[0];
+			string lineStr = splitString[1];
+			string columnStr = splitString[2];
+
+			if (!int.TryParse(lineStr, out var line))
+			{
+				line = 1;
+			}
+
+			if (!int.TryParse(columnStr, out var column))
+			{
+				column = 1;
+			}
+
+			if (!File.Exists(file))
+			{
+				return;
+			}
+
+			var dte = GetGlobalService(typeof(DTE)) as DTE2;
+			//var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+			dte.MainWindow.Activate();
+			dte.ItemOperations.OpenFile(file);
+			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(line, column + 1);
 		}
 
 		#endregion

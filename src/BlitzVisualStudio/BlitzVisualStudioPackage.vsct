@@ -52,13 +52,20 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidBlitzVisualStudioPackageCmdSet" id="BlitzSearchThisId" priority="0x0100" type="Button">
-        <Parent guid="guidBlitzVisualStudioPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="blitzIcon" id="blitzIcon1" />
-        <Strings>
-          <ButtonText>Blitz Search This</ButtonText>
-        </Strings>
-      </Button>
+			<Button guid="guidBlitzVisualStudioPackageCmdSet" id="BlitzSearchThisId" priority="0x0100" type="Button">
+				<Parent guid="guidBlitzVisualStudioPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="blitzIcon" id="blitzIcon1" />
+				<Strings>
+					<ButtonText>Blitz Search This</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidBlitzVisualStudioPackageCmdSet" id="BlitzReplaceThisId" priority="0x0200" type="Button">
+				<Parent guid="guidBlitzVisualStudioPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="blitzIcon" id="blitzIcon1" />
+				<Strings>
+					<ButtonText>Blitz Replace This</ButtonText>
+				</Strings>
+			</Button>
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -80,7 +87,8 @@
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidBlitzVisualStudioPackageCmdSet" value="{b838b65e-b0f4-4106-aa88-e936bf0b2e0c}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="BlitzSearchThisId" value="0x0100" />
+			<IDSymbol name="BlitzSearchThisId" value="0x0100" />
+			<IDSymbol name="BlitzReplaceThisId" value="0x0200" />
     </GuidSymbol>
 
 		<GuidSymbol name="blitzIcon" value="{5E6A92F3-C620-46EA-9BB1-700243F11C78}">
