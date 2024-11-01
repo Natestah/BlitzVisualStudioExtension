@@ -17,3 +17,5 @@ src/.vs/BlitzVisualStudio/FileContentIndex/7ca5546e-e48d-432b-bf6b-8c52e503a0a0.
 src/.vs/BlitzVisualStudio/FileContentIndex/70d4805a-bc5d-4261-9075-84ec592c1436.vsidx
 
 *.TMP
+/src/BlitzVisualStudio/.vs
+src/BlitzVisualStudio/BlitzVisualStudio.csproj.user

@@ -1,7 +1,9 @@
 ﻿using EnvDTE;
 using EnvDTE80;
+using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualBasic;
 using System;
 using System.IO;
 using System.IO.Packaging;
@@ -63,6 +65,7 @@ namespace BlitzVisualStudio
 			await BlitzSearchThis.InitializeAsync(this);
 			await BlitzReplaceThis.InitializeAsync(this);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO", Goto);
+			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW", GotoPreview);
 		}
 
 		/// <summary>
@@ -126,6 +129,16 @@ namespace BlitzVisualStudio
 		}
 		private async void Goto(string gotoCommand)
 		{
+			GotoExecute(gotoCommand, preview: false);
+		}
+
+		private async void GotoPreview(string gotoCommand)
+		{
+			GotoExecute(gotoCommand, preview: true);
+		}
+
+		private async void GotoExecute(string gotoCommand, bool preview)
+		{
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(this.DisposalToken);
 			var splitString = gotoCommand.Split(',');
 			if (splitString.Length != 3)
@@ -162,8 +175,15 @@ namespace BlitzVisualStudio
 
 			var dte = GetGlobalService(typeof(DTE)) as DTE2;
 			//var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
-			dte.MainWindow.Activate();
-			dte.ItemOperations.OpenFile(file);
+			if(preview)
+			{
+				await VS.Documents.OpenInPreviewTabAsync(file);
+			}
+			else
+			{
+				dte.MainWindow.Activate();
+				dte.ItemOperations.OpenFile(file);
+			}
 			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(line, column + 1);
 		}
 

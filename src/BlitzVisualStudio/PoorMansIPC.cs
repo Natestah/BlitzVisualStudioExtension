@@ -41,7 +41,29 @@ namespace BlitzVisualStudio
 				string action = Path.GetFileNameWithoutExtension(fullFilename).ToUpper();
 				if (_actions.TryGetValue(action, out var function))
 				{
-					function.Invoke(File.ReadAllText(fullFilename));
+					string text = null;
+					for (int i = 0; i < 10; i++)
+					{
+						try
+						{
+							using (var fi = File.Open(fullFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+							{
+								using (var sr = new StreamReader(fi))
+								{
+									text = sr.ReadToEnd();
+								}
+							}
+						}
+						catch (Exception ex)
+						{
+							// wait for a bit.. 
+							System.Threading.Thread.Sleep(20);
+						}
+					}
+					if(text != null)
+					{
+						function.Invoke(text);
+					}
 				}
 
 			}
