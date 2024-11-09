@@ -57,8 +57,6 @@ namespace BlitzVisualStudio
 		/// <param name="package">Owner package, not null.</param>
 		public static async Task InitializeAsync(AsyncPackage package)
 		{
-			// Switch to the main thread - the call to AddCommand in BlitzReplaceThis's constructor requires
-			// the UI thread.
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
 			OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -75,7 +73,8 @@ namespace BlitzVisualStudio
 		/// <param name="e">Event args.</param>
 		private void Execute(object sender, EventArgs e)
 		{
-			if( package is BlitzVisualStudioPackage blitzVisualStudioPackage)
+			ThreadHelper.ThrowIfNotOnUIThread();
+			if ( package is BlitzVisualStudioPackage blitzVisualStudioPackage)
 			{
 				blitzVisualStudioPackage.SendSearchContext("Blitz Replace This", "SET_REPLACE");
 			}

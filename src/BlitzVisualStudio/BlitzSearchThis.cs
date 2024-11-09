@@ -61,7 +61,6 @@ namespace BlitzVisualStudio
 			// Switch to the main thread - the call to AddCommand in BlitzSearchThis's constructor requires
 			// the UI thread.
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
-
 			OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 			Instance = new BlitzSearchThis(package, commandService);
 		}
@@ -75,6 +74,7 @@ namespace BlitzVisualStudio
 		/// <param name="e">Event args.</param>
 		private void Execute(object sender, EventArgs e)
 		{
+			ThreadHelper.ThrowIfNotOnUIThread();
 			if (package is BlitzVisualStudioPackage blitzVisualStudioPackage)
 			{
 				blitzVisualStudioPackage.SendSearchContext("Blitz Search This", "SET_SEARCH");

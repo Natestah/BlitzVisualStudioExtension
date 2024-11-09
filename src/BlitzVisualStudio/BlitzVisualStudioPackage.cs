@@ -6,12 +6,13 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualBasic;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.IO.Packaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Linq;
 using Package = Microsoft.VisualStudio.Shell.Package;
 using Task = System.Threading.Tasks.Task;
-
 namespace BlitzVisualStudio
 {
 	/// <summary>
@@ -38,6 +39,7 @@ namespace BlitzVisualStudio
 	[ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
 	public sealed class BlitzVisualStudioPackage : AsyncPackage
 	{
+
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
@@ -57,7 +59,7 @@ namespace BlitzVisualStudio
 		/// <param name="cancellationToken">A cancellation token to monitor for initialization cancellation, which can occur when VS is shutting down.</param>
 		/// <param name="progress">A provider for progress updates.</param>
 		/// <returns>A task representing the async work of package initialization, or an already completed task if there is none. Do not return null from this method.</returns>
-		protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+		protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
 		{
 			// When initialized asynchronously, the current thread may be a background thread at this point.
 			// Do any initialization that requires the UI thread after switching to the UI thread.
@@ -66,7 +68,128 @@ namespace BlitzVisualStudio
 			await BlitzReplaceThis.InitializeAsync(this);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO", Goto);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW", GotoPreview);
+
+			bool isSolutionLoaded = await VS.Solutions.IsOpenAsync();
+
+			if (isSolutionLoaded)
+			{
+				HandleOpenSolution();
+			}
+
+			VS.Events.SolutionEvents.OnAfterOpenSolution += SolutionEvents_OnAfterOpenSolution;
+
+			VS.Events.SolutionEvents.OnAfterOpenProject += SolutionEvents_OnAfterOpenProject;
+			VS.Events.SolutionEvents.OnAfterRenameProject += SolutionEvents_OnAfterRenameProject;
+
+			VS.Events.DocumentEvents.Opened += DocumentEvents_Opened;
+			VS.Events.SelectionEvents.SelectionChanged += SelectionEvents_SelectionChanged;
 		}
+
+		private void SolutionEvents_OnAfterRenameProject(Community.VisualStudio.Toolkit.Project obj)
+		{
+			HandleOpenSolution();
+		}
+
+		private void SolutionEvents_OnAfterOpenProject(Community.VisualStudio.Toolkit.Project obj)
+		{
+			HandleOpenSolution();
+		}
+
+		private void SolutionEvents_OnAfterOpenSolution(Community.VisualStudio.Toolkit.Solution obj)
+		{
+			HandleOpenSolution();
+		}
+
+		private void SelectionEvents_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+			ThreadHelper.JoinableTaskFactory.Run(async delegate {
+				await Set_VSProjectAsync(e.To);
+			});
+		}
+
+		private void DocumentEvents_Opened(string obj)
+		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+			ThreadHelper.JoinableTaskFactory.Run(async delegate { 
+				var documentView = await VS.Documents.GetActiveDocumentViewAsync();
+				if (documentView != null && documentView.FilePath is string fileName)
+				{
+					await Set_VSProjectAsync(fileName);
+				}
+			});
+		}
+
+		private async Task Set_VSProjectAsync(SolutionItem item)
+		{
+			var solution = await VS.Solutions.GetCurrentSolutionAsync();
+			while (item != null && item.Parent != null)
+			{
+				item = item.Parent;
+				if (item.Type == SolutionItemType.Project)
+				{
+					var export = new SelectedProjectExport()
+					{
+						Name = item.FullPath,
+						BelongsToSolution = solution.FullPath
+					};
+					var fileText = System.Text.Json.JsonSerializer.Serialize<SelectedProjectExport>(export);
+					WriteIpcMessage("VS_PROJECT", fileText);
+					break;
+				}
+			}
+		}
+		private async Task Set_VSProjectAsync(string fileName)
+		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(this.DisposalToken);
+			SolutionItem item = await PhysicalFile.FromFileAsync(fileName);
+			await Set_VSProjectAsync(item);
+		}
+
+		public void HandleOpenSolution(object sender = null, EventArgs e = null)
+		{
+			ThreadHelper.JoinableTaskFactory.Run(async delegate { 
+				var solution = await VS.Solutions.GetCurrentSolutionAsync();
+
+				if (solution == null)
+				{
+					return;
+				}
+
+				var projects = await VS.Solutions.GetAllProjectsAsync();
+				var projectCollection = new List<Project>();
+				var solutionExport = new SolutionExport() { Name = solution.FullPath, Projects = projectCollection };
+
+				foreach (Community.VisualStudio.Toolkit.Project project in projects)
+				{
+					var projectExport = new Project() { Name = project.FullPath };
+					projectCollection.Add(projectExport);
+					var fileSet = new HashSet<string>();
+					RecursiveGetFiles(fileSet, project);
+					projectExport.Files = fileSet.ToList();
+				}
+
+				var fileText = System.Text.Json.JsonSerializer.Serialize<SolutionExport>(solutionExport);
+				WriteIpcMessage("VS_SOLUTION", fileText);
+			});
+		}
+
+		private void RecursiveGetFiles( HashSet<string> files, SolutionItem item)
+		{
+			if(item.Type == SolutionItemType.PhysicalFile)
+			{
+				files.Add(item.FullPath);
+			}
+
+			if(item.Children != null)
+			{
+				foreach(var child in item.Children)
+				{
+					RecursiveGetFiles(files, child);
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Sets Blitz Search Executable to Search for the active selection or automatic word under the caret.
@@ -106,40 +229,91 @@ namespace BlitzVisualStudio
 				}
 			}
 
+			string blitzPath = GetBlitzPath();
+			BlitzInstallCheck();
+			WriteIpcMessage(commandName, text);
+			BootStrapBlitz();
+		}
+
+		public void WriteIpcMessage( string commandName,  string text)
+		{
+			string userPath = PoorMansIPC.Instance.GetPoorMansIPCPath();
+			Directory.CreateDirectory(userPath);
+			string fullPath = Path.Combine(userPath, $"{commandName}.txt");
+			File.WriteAllText(fullPath, text);
+		}
+
+		public void BootStrapBlitz()
+		{
+
+			try
+			{
+				//If blitz is running, return.. 
+				if (System.Diagnostics.Process.GetProcessesByName("Blitz").Length > 0)
+				{
+					return;
+				}
+			}
+			catch
+			{
+				// assumes security issue, it's ok since BlitzSearch is Single Instance.. just call it.
+			}
+			System.Diagnostics.Process.Start(GetBlitzPath());
+		}
+
+		public string GetBlitzPath()
+		{
 			string envProgramFiles = Environment.GetEnvironmentVariable("PROGRAMFILES");
-			string blitzPath = Path.Combine(envProgramFiles, "Blitz", "Blitz.exe");
+			return Path.Combine(envProgramFiles, "Blitz", "Blitz.exe");
+		}
+
+		public bool BlitzInstallCheck()
+		{
+			string blitzPath = GetBlitzPath();
 			if (!File.Exists(blitzPath))
 			{
-				// Show a message box to prove we were here
+				// Show a message box then go to download page.
 				VsShellUtilities.ShowMessageBox(
 					this,
 					"Failed To locate Blitz.exe, please visit https://natestah.com to download",
-					title,
+					"BlitzSearch Is Not Installed",
 					OLEMSGICON.OLEMSGICON_INFO,
 					OLEMSGBUTTON.OLEMSGBUTTON_OK,
 					OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+
+				System.Diagnostics.Process.Start("https://natestah.com/download");
+
+				return false;
 			}
-
-			string userPath = PoorMansIPC.Instance.GetPoorMansIPCPath();
-			Directory.CreateDirectory(userPath);
-
-			string fullPath = Path.Combine(userPath, $"{commandName}.txt");
-			File.WriteAllText(fullPath, text);
-			System.Diagnostics.Process.Start(blitzPath);
+			return true;
 		}
-		private async void Goto(string gotoCommand)
+
+
+		private void Goto(string gotoCommand)
 		{
-			GotoExecute(gotoCommand, preview: false);
+			ThreadHelper.JoinableTaskFactory.Run(async delegate
+			{
+				await GotoExecuteAsync(gotoCommand, preview: false);
+			});
 		}
 
-		private async void GotoPreview(string gotoCommand)
+		private void GotoPreview(string gotoCommand)
 		{
-			GotoExecute(gotoCommand, preview: true);
+			ThreadHelper.JoinableTaskFactory.Run(async delegate
+			{
+				await GotoExecuteAsync(gotoCommand, preview: true);
+			});
 		}
 
-		private async void GotoExecute(string gotoCommand, bool preview)
+		private async Task GotoExecuteAsync(string gotoCommand, bool preview)
 		{
 			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(this.DisposalToken);
+
+			//Todo: Remove this if/when I get Version checking between Blitz<->Plugin, or just after some time 11/1/25
+			var legacyChar = ','; // This was a mistake as ',' is a legal file character. 
+
+			var splitChar = gotoCommand.Contains(';') ? ';' : legacyChar;
+
 			var splitString = gotoCommand.Split(',');
 			if (splitString.Length != 3)
 			{
@@ -173,8 +347,8 @@ namespace BlitzVisualStudio
 				return;
 			}
 
+			//Todo: See about DTE -> Community wrapper here.
 			var dte = GetGlobalService(typeof(DTE)) as DTE2;
-			//var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
 			if(preview)
 			{
 				await VS.Documents.OpenInPreviewTabAsync(file);
@@ -184,6 +358,7 @@ namespace BlitzVisualStudio
 				dte.MainWindow.Activate();
 				dte.ItemOperations.OpenFile(file);
 			}
+			
 			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(line, column + 1);
 		}
 

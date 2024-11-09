@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
+using System.Threading.Tasks;
 namespace BlitzVisualStudio
 {
 	public class PoorMansIPC
@@ -36,6 +38,14 @@ namespace BlitzVisualStudio
 
 		private void DoActionWithFile(string fullFilename)
 		{
+			ThreadHelper.JoinableTaskFactory.Run(async delegate
+			{
+				await DoActionWithFileAsync(fullFilename);
+			});
+		}
+
+		private async Task DoActionWithFileAsync(string fullFilename)
+		{
 			try
 			{
 				string action = Path.GetFileNameWithoutExtension(fullFilename).ToUpper();
@@ -50,17 +60,17 @@ namespace BlitzVisualStudio
 							{
 								using (var sr = new StreamReader(fi))
 								{
-									text = sr.ReadToEnd();
+									text = await sr.ReadToEndAsync();
 								}
 							}
 						}
-						catch (Exception ex)
+						catch (Exception)
 						{
 							// wait for a bit.. 
-							System.Threading.Thread.Sleep(20);
+							//await Task.Delay(20);
 						}
 					}
-					if(text != null)
+					if (text != null)
 					{
 						function.Invoke(text);
 					}
