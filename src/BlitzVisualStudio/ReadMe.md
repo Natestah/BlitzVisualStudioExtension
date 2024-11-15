@@ -2,11 +2,18 @@
 
 Blitz Search is an external Tool that provides a dialogue for search much the same as JetBrains IDE's. Blitz Search is in Active development and seeking feedback.
 
-The query format is words on a line based instead of literal by default, though a literal option is available.
+The query format is words on a line based instead of literal by default.
 
 # Blitz Search is both Fast and Readable:
 
 ![Blitz Search In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/AnimateBlitzUpdated.gif)
+
+# Blitz Search for Visual Studio now contains selectable Solution, Project, Active Files, Current file scopes.
+
+These scopes, when selected, update in real time.
+
+![Blitz Search Scopes In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/BlitzScopes.gif)
+
 
 # Words on a line query is default
 

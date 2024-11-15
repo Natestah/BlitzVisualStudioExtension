@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.91" Language="en-US" Publisher="Nathan Silvers" />
+        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.92" Language="en-US" Publisher="Nathan Silvers" />
         <DisplayName>Blitz Search</DisplayName>
-        <Description xml:space="preserve">A dialog based search tool, it aims to be a full replacement for Find-in-Files And Replace in files.  It offers full syntax highlighting, Real Time updates, and handy target sets. While Blitz Search offers parity with "Literal Search" and "Regular Expression" search, it's default mode is it's own expression "Words on a line" that matches words on a line in any order. Blitz Search is a universal stand alone executable that will also work with Visual Studio Code and other Code Editors.</Description>
+        <Description xml:space="preserve">A dialog based search tool, it aims to be a full replacement for Find-in-Files And Replace in files.  It offers full syntax highlighting, Real Time updates, and handy target file sets. 
+
+Blitz Search defaults to "Words on a line" matching words in any order. 
+
+Blitz Search is a universal stand alone executable that will also work with Visual Studio Code and other Code Editors.</Description>
         <MoreInfo>https://natestah.com</MoreInfo>
-        <GettingStartedGuide>https://natestah.com</GettingStartedGuide>
+        <GettingStartedGuide>https://natestah.com/blog/f/blitz-search-with-visual-studio</GettingStartedGuide>
         <ReleaseNotes>Adding preview support</ReleaseNotes>
         <Icon>BlitzIcon.ico</Icon>
         <PreviewImage>NewBlitzPng.png</PreviewImage>

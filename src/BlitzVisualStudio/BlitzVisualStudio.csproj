@@ -46,8 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ActiveFilesList.cs" />
     <Compile Include="BlitzReplaceThis.cs" />
     <Compile Include="BlitzSearchThis.cs" />
+    <Compile Include="GotoDirective.cs" />
     <Compile Include="PoorMansIPC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BlitzVisualStudioPackage.cs" />

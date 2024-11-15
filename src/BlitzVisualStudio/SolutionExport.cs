@@ -20,6 +20,7 @@ namespace BlitzVisualStudio
 
 	public class SelectedProjectExport
 	{
+		public string ActiveFileInProject { get; set; }
 		public string Name { get; set; }
 		public string BelongsToSolution { get; set; }
 	}

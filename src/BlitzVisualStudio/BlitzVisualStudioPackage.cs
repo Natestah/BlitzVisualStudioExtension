@@ -47,7 +47,7 @@ namespace BlitzVisualStudio
 
 		/// <summary>
 		/// BlitzVisualStudioPackage GUID string.
-		/// </summary>
+		/// </summary>	
 		public const string PackageGuidString = "310f1a03-8e3d-40ed-8fd2-92ba9aa31ec2";
 
 		#region Package Members
@@ -68,6 +68,8 @@ namespace BlitzVisualStudio
 			await BlitzReplaceThis.InitializeAsync(this);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO", Goto);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW", GotoPreview);
+			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW_JSON", GotoPreviewJson);
+			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_JSON", GotoJson);
 
 			bool isSolutionLoaded = await VS.Solutions.IsOpenAsync();
 
@@ -82,6 +84,7 @@ namespace BlitzVisualStudio
 			VS.Events.SolutionEvents.OnAfterRenameProject += SolutionEvents_OnAfterRenameProject;
 
 			VS.Events.DocumentEvents.Opened += DocumentEvents_Opened;
+			VS.Events.DocumentEvents.Closed += DocumentEvents_Closed;
 			VS.Events.SelectionEvents.SelectionChanged += SelectionEvents_SelectionChanged;
 		}
 
@@ -106,11 +109,56 @@ namespace BlitzVisualStudio
 			ThreadHelper.JoinableTaskFactory.Run(async delegate {
 				await Set_VSProjectAsync(e.To);
 			});
+			if(e.To.Type == SolutionItemType.PhysicalFile)
+			{
+				SendActiveFilesList();
+			}
+		}
+
+		private void DocumentEvents_Closed(string obj)
+		{
+			SendActiveFilesList();
+		}
+
+		private void SendActiveFilesList(string file = null)
+		{
+			ThreadHelper.JoinableTaskFactory.Run(async delegate {
+
+				var solution = await VS.Solutions.GetCurrentSolutionAsync();
+				string solutionFileName = solution != null ? solution.FullPath : null;
+				var activeFiles = new ActiveFilesList { SolutionFileName = solutionFileName };
+				var files = new HashSet<string>();
+				if(file != null)
+				{
+					files.Add(file);
+				}
+				foreach (var item in await VS.Windows.GetAllDocumentWindowsAsync())
+				{
+					var docView = await item.GetDocumentViewAsync();
+					if(docView == null)
+					{
+						continue;
+					}
+					if (docView.FilePath != null)
+					{
+						files.Add(docView.FilePath);
+					}
+				}
+
+				if (files.Count == 0)
+				{
+					return;
+				}
+
+				activeFiles.ActiveFiles = files.ToList();
+
+				var fileText = System.Text.Json.JsonSerializer.Serialize(activeFiles);
+				WriteIpcMessage("VS_ACTIVE_FILES", fileText);
+			});
 		}
 
 		private void DocumentEvents_Opened(string obj)
 		{
-			ThreadHelper.ThrowIfNotOnUIThread();
 			ThreadHelper.JoinableTaskFactory.Run(async delegate { 
 				var documentView = await VS.Documents.GetActiveDocumentViewAsync();
 				if (documentView != null && documentView.FilePath is string fileName)
@@ -118,10 +166,18 @@ namespace BlitzVisualStudio
 					await Set_VSProjectAsync(fileName);
 				}
 			});
+			SendActiveFilesList(obj);
 		}
 
 		private async Task Set_VSProjectAsync(SolutionItem item)
 		{
+			string activeFile = null;
+			
+			if(item != null && item.Type == SolutionItemType.PhysicalFile)
+			{
+				activeFile = item.FullPath;
+			}
+
 			var solution = await VS.Solutions.GetCurrentSolutionAsync();
 			while (item != null && item.Parent != null)
 			{
@@ -130,6 +186,7 @@ namespace BlitzVisualStudio
 				{
 					var export = new SelectedProjectExport()
 					{
+						ActiveFileInProject = activeFile,
 						Name = item.FullPath,
 						BelongsToSolution = solution.FullPath
 					};
@@ -240,7 +297,18 @@ namespace BlitzVisualStudio
 			string userPath = PoorMansIPC.Instance.GetPoorMansIPCPath();
 			Directory.CreateDirectory(userPath);
 			string fullPath = Path.Combine(userPath, $"{commandName}.txt");
-			File.WriteAllText(fullPath, text);
+			for (int i = 0; i < 3; i++)
+			{
+				try
+				{
+					File.WriteAllText(fullPath, text);
+				}
+				catch 
+				{
+					System.Threading.Thread.Sleep(30);
+					continue;
+				}
+			}
 		}
 
 		public void BootStrapBlitz()
@@ -303,6 +371,63 @@ namespace BlitzVisualStudio
 			{
 				await GotoExecuteAsync(gotoCommand, preview: true);
 			});
+		}
+
+		private void GotoJson(string gotoCommand)
+		{
+			ThreadHelper.JoinableTaskFactory.Run(async delegate
+			{
+				await GotoExecuteJSONAsync(gotoCommand, preview: false);
+			});
+		}
+
+		private void GotoPreviewJson(string gotoCommand)
+		{
+			ThreadHelper.JoinableTaskFactory.Run(async delegate
+			{
+				await GotoExecuteJSONAsync(gotoCommand, preview: true);
+			});
+		}
+
+
+		private async Task GotoExecuteJSONAsync(string gotoCommand, bool preview)
+		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(this.DisposalToken);
+
+			GotoDirective directive = null;
+
+			try
+			{
+				directive = System.Text.Json.JsonSerializer.Deserialize<GotoDirective>(gotoCommand);
+			}
+			catch
+			{
+				return;
+			}
+
+
+
+			var solution = await VS.Solutions.GetCurrentSolutionAsync();
+
+			//Generally keeps from having multiple instances responding to the command.
+			if(directive.SolutionName != solution.FullPath)
+			{
+				return;
+			}
+
+			if (preview)
+			{
+				await VS.Documents.OpenInPreviewTabAsync(directive.FileName);
+			}
+			else
+			{
+				await VS.Documents.OpenAsync(directive.FileName);
+			}
+
+
+			//Todo: See about DTE -> Community wrapper here.
+			var dte = GetGlobalService(typeof(DTE)) as DTE2;
+			((EnvDTE.TextSelection)dte.ActiveDocument.Selection).MoveToLineAndOffset(directive.Line, directive.Column + 1);
 		}
 
 		private async Task GotoExecuteAsync(string gotoCommand, bool preview)
