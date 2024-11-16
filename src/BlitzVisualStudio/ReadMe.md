@@ -1,16 +1,19 @@
 ﻿# Blitz Search
 
-Blitz Search is an external Tool that provides a dialogue for search much the same as JetBrains IDE's. Blitz Search is in Active development and seeking feedback.
+Blitz Search is an external Tool that provides a dynamic dialogue for search.  
 
-The query format is words on a line based instead of literal by default.
+The goal for Blitz Search is to fully replace Find-in-Files. Go ahead and rebind both Control-Shift-F and Control-Shift-H to the "Blitz Search This/Blitz Replace This commands.
 
-# Blitz Search is both Fast and Readable:
+While Blitz Search is a Universal Tool ( see extension for VS Code, Sublime Text, Notepad++, and Jetbrains ) It has custom benefits for Visual studio.
+
+# Words on a line search is a Faster and more pleasant way to search
+
 
 ![Blitz Search In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/AnimateBlitzUpdated.gif)
 
-# Blitz Search for Visual Studio now contains selectable Solution, Project, Active Files, Current file scopes.
+# Find in Solution, Project, Opened files, Active file, or Folder sets
 
-These scopes, when selected, update in real time.
+These scopes, when selected, update results in real time.
 
 ![Blitz Search Scopes In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/BlitzScopes.gif)
 
@@ -48,29 +51,30 @@ Blitz Replace Command Frames up a Replacement Query, Replace can be either "Word
 ## Features
 
 * Find words on a line by default ( Literal and Regex are available too )
-* Find Text in Files faster, by retaining index in memory AND using the quickest form of Serialization for recalling old sessions.  Blits Search is very fast! 
-* Real time results update while you type.  
-* Large volumes of files quickly. 
-* Syntax Highlighting in results, bold highlights, easy on the eyes.
-* .GitIgnore / .BlitzIgnore file filter reduces workload and Clutter in results.
-* Auto-Human text file discovery Takes burden off Filtering.  There is no file extension here.
-* FileName filter is a word on line filters taking the same query "\path_name\ @.cs|@.xaml". Only use it when results need filtering.
-* Quality of Life focused, Community Driven features ( see Discord invite )
+* Find Text in Files faster.
+* Results update automatically while you type and adjust the query.
+* Handles Large volumes of files quickly. 
+* Syntax Highlighting in results.
+* Follows .GitIgnore / .BlitzIgnore file filter to reduce results from codegen.
+* Auto-Human text file discovery Takes burden off Filtering. 
+* FileName filter is a word on same words on a line query "\path_name\ @.cs|@.xaml". 
+* Community Driven features ( see Discord invite )
 
 
 ## Requirements
-> Windows x64 only, Download and install the FREE Companion application Blitz Search, Reasonably priced Premium search subscription for Upgraded Theme selection and Replace functionality.
+> Windows x64 only, Download and install the FREE Companion application Blitz Search.
 >
 > Download from
-> [natestah.com](https://natestah.com/)
+> 
+> [natestah.com/download](https://natestah.com/download)
 
 ## Known Issues
 
-> Blitz Search currently has a small user base (friends).  Help me get the word out, like and subscribe. leave a review..
+> Blitz Search currently has a small user base.  So feedback is scarce.
 > 
 > [Blitz Search Discord](https://discord.com/invite/UYPwQY9ngm)
 >
-> [r/BlitzSearch](https://www.reddit.com/r/BlitzSearch/)
+> [x.com/BlitzSearch](https://x.com/BlitzSearch)
 
 
 ## Blitz Search is #buildinginpublic, check out this YouTube channel

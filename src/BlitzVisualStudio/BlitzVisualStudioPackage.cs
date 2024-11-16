@@ -421,6 +421,13 @@ namespace BlitzVisualStudio
 			}
 			else
 			{
+				var activeDocument = await VS.Documents.GetActiveDocumentViewAsync();
+				if(activeDocument.FilePath == directive.FileName && !activeDocument.TextBuffer.EditInProgress)
+				{
+					var window = await VS.Windows.FindDocumentWindowAsync(activeDocument.FilePath);
+					await window.CloseFrameAsync(FrameCloseOption.NoSave);
+
+				}
 				await VS.Documents.OpenAsync(directive.FileName);
 			}
 
