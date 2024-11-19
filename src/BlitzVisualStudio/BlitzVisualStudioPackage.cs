@@ -257,31 +257,32 @@ namespace BlitzVisualStudio
 		{
 			ThreadHelper.ThrowIfNotOnUIThread();
 
+			string text = string.Empty;
+
 			var dte = GetGlobalService(typeof(DTE)) as DTE2;
 
-			if (dte.ActiveDocument == null)
+			if (dte.ActiveDocument != null)
 			{
-				return;
-			}
-			var selection = (TextSelection)dte.ActiveDocument.Selection;
-			string text = selection.Text;
-			if (string.IsNullOrEmpty(text))
-			{
-				if (selection.IsEmpty)
-				{
-					selection.WordLeft(false);
-					selection.WordRight(true);
-				}
+				var selection = (TextSelection)dte.ActiveDocument.Selection;
 				text = selection.Text;
-				if (!string.IsNullOrEmpty(text))
+				if (string.IsNullOrEmpty(text))
 				{
-					if (text.ToLower().Equals(text))
+					if (selection.IsEmpty)
 					{
-						text = $"^@{text}";
+						selection.WordLeft(false);
+						selection.WordRight(true);
 					}
-					else
+					text = selection.Text;
+					if (!string.IsNullOrEmpty(text))
 					{
-						text = $"@{text}";
+						if (text.ToLower().Equals(text))
+						{
+							text = $"^@{text}";
+						}
+						else
+						{
+							text = $"@{text}";
+						}
 					}
 				}
 			}

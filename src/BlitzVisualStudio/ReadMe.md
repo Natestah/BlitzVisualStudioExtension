@@ -1,15 +1,23 @@
 ﻿# Blitz Search
 
-Blitz Search is an external Tool that provides a dynamic dialogue for search.  
+Blitz Search is an external Tool that provides a dialogue for search.  
 
 The goal for Blitz Search is to fully replace Find-in-Files. Go ahead and rebind both Control-Shift-F and Control-Shift-H to the "Blitz Search This/Blitz Replace This commands.
 
-While Blitz Search is a Universal Tool ( see extension for VS Code, Sublime Text, Notepad++, and Jetbrains ) It has custom benefits for Visual studio.
+Blitz Search is a Standalone Tool ( see extension for VS Code, Sublime Text, Notepad++, and Jetbrains ).
 
-# Words on a line search is a Faster and more pleasant way to search
+Source code for Blitz Search (app) here:
+
+https://github.com/natestah/blitzSearch/
+
+This extension enables a rich interaction with the tool allowing you to Search for Words at your caret position, but also taking care of Scopes, Find-in-Solution or project.
 
 
-![Blitz Search In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/AnimateBlitzUpdated.gif)
+
+# Faster words-on-a-line Search
+
+
+![Blitz Search In motion](https://blitzsearch.s3.us-east-2.amazonaws.com/VS_Hero30fps.gif)
 
 # Find in Solution, Project, Opened files, Active file, or Folder sets
 
@@ -31,7 +39,9 @@ Using Modern C# as an example for a search that's hard with traditional search
 With Blitz Search the "vegetables new list" matches all of things, where with traditional Literal search or Regular Expression, this can be hard to do.
 
 
-# Configurable Sets of Paths, with Icons to boldly Show what scopes you are looking at ( click image for example ).
+# Configure Sets of Paths, with Icons.
+
+(Click image for Youtube demo)
 
 [![Blitz SearchQuickScope](https://blitzsearch.s3.us-east-2.amazonaws.com/BlitzQuickScope.png)](https://youtube.com/shorts/k2wyDA6onqM)
 
@@ -52,13 +62,15 @@ Blitz Replace Command Frames up a Replacement Query, Replace can be either "Word
 
 * Find words on a line by default ( Literal and Regex are available too )
 * Find Text in Files faster.
-* Results update automatically while you type and adjust the query.
+* Results update automatically while you type and adjust the query, or save files.
 * Handles Large volumes of files quickly. 
 * Syntax Highlighting in results.
 * Follows .GitIgnore / .BlitzIgnore file filter to reduce results from codegen.
 * Auto-Human text file discovery Takes burden off Filtering. 
 * FileName filter is a word on same words on a line query "\path_name\ @.cs|@.xaml". 
 * Community Driven features ( see Discord invite )
+* Solution / Project Scope filtering
+* Scope to Open files / Active file.
 
 
 ## Requirements
