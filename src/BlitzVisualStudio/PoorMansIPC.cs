@@ -6,13 +6,17 @@ using Microsoft.VisualStudio.Threading;
 using System.Threading.Tasks;
 namespace BlitzVisualStudio
 {
+
 	public class PoorMansIPC
 	{
 		public static PoorMansIPC Instance = new PoorMansIPC();
 
 		private Dictionary<string, Action<string>> _actions = new Dictionary<string, Action<string>>();
+		private Dictionary<string, Action<string>> _solutionAction= new Dictionary<string, Action<string>>();
 
 		private FileSystemWatcher _fileSystemWatcher;
+		private Func<string, bool> _solutionTest;
+
 		public PoorMansIPC()
 		{
 			var specificFolder = GetPoorMansIPCPath(); 
@@ -36,6 +40,8 @@ namespace BlitzVisualStudio
 
 		public void RegisterAction(string name, Action<string> action) => _actions[name] = action;
 
+		public void RegisterSolutionAction(string name, Action<string> action) => _solutionAction[name] = action;
+
 		private void DoActionWithFile(string fullFilename)
 		{
 			ThreadHelper.JoinableTaskFactory.Run(async delegate
@@ -49,33 +55,57 @@ namespace BlitzVisualStudio
 			try
 			{
 				string action = Path.GetFileNameWithoutExtension(fullFilename).ToUpper();
-				if (_actions.TryGetValue(action, out var function))
+
+				bool isSolutionSpecificAction = false;
+				string solutionName = string.Empty;
+				if (action.Contains(","))
 				{
-					string text = null;
-					for (int i = 0; i < 10; i++)
+					isSolutionSpecificAction = true;
+					var split = action.Split(',');
+					if (split.Length != 2)
 					{
-						try
+						//not currently supporting anything else
+						return;
+					}
+					action = split[0];
+					solutionName = split[1];
+				}
+
+				if (!_actions.TryGetValue(action, out var function))
+				{
+					return;
+				}
+
+				//before reading the file lets see if the solution matches
+				if (isSolutionSpecificAction && !_solutionTest(solutionName))
+				{
+					return;
+				}
+
+				string text = null;
+				for (int i = 0; i < 10; i++)
+				{
+					try
+					{
+						using (var fi = File.Open(fullFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
 						{
-							using (var fi = File.Open(fullFilename, FileMode.Open, FileAccess.Read, FileShare.Read))
+							using (var sr = new StreamReader(fi))
 							{
-								using (var sr = new StreamReader(fi))
-								{
-									text = await sr.ReadToEndAsync();
-								}
+								text = await sr.ReadToEndAsync();
 							}
 						}
-						catch (Exception)
-						{
-							// wait for a bit.. 
-							//await Task.Delay(20);
-						}
 					}
-					if (text != null)
+					catch (Exception)
 					{
-						function.Invoke(text);
+						// wait for a bit.. 
+						//await Task.Delay(20);
 					}
 				}
 
+				if (text != null)
+				{
+					function.Invoke(text);
+				}
 			}
 			catch (Exception e)
 			{
@@ -102,6 +132,11 @@ namespace BlitzVisualStudio
 					DoActionWithFile(file);
 				}
 			}
+		}
+
+		internal void RegisterSolutionTest(Func<string, bool> isSolutionCurrent)
+		{
+			_solutionTest = isSolutionCurrent;
 		}
 	}
 }

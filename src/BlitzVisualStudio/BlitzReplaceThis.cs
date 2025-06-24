@@ -76,7 +76,7 @@ namespace BlitzVisualStudio
 			ThreadHelper.ThrowIfNotOnUIThread();
 			if ( package is BlitzVisualStudioPackage blitzVisualStudioPackage)
 			{
-				blitzVisualStudioPackage.SendSearchContext("Blitz Replace This", "SET_REPLACE");
+				blitzVisualStudioPackage.SendSearchContext("Blitz Replace This", "SET_CONTEXT_REPLACE");
 			}
 		}
 	}

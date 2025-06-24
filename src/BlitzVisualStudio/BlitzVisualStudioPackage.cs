@@ -13,6 +13,8 @@ using System.Threading;
 using System.Linq;
 using Package = Microsoft.VisualStudio.Shell.Package;
 using Task = System.Threading.Tasks.Task;
+using System.Security.Cryptography;
+using System.Text;
 namespace BlitzVisualStudio
 {
 	/// <summary>
@@ -50,6 +52,9 @@ namespace BlitzVisualStudio
 		/// </summary>	
 		public const string PackageGuidString = "310f1a03-8e3d-40ed-8fd2-92ba9aa31ec2";
 
+		private string _currentSolution = string.Empty;
+		private string _solutionPathID= string.Empty;
+
 		#region Package Members
 
 		/// <summary>
@@ -66,6 +71,8 @@ namespace BlitzVisualStudio
 			await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 			await BlitzSearchThis.InitializeAsync(this);
 			await BlitzReplaceThis.InitializeAsync(this);
+
+			PoorMansIPC.Instance.RegisterSolutionTest(IsSolutionCurrent);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO", Goto);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW", GotoPreview);
 			PoorMansIPC.Instance.RegisterAction("VISUAL_STUDIO_GOTO_PREVIEW_JSON", GotoPreviewJson);
@@ -78,6 +85,8 @@ namespace BlitzVisualStudio
 				HandleOpenSolution();
 			}
 
+			VS.Events.SolutionEvents.OnBeforeCloseSolution += SolutionEvents_OnBeforeCloseSolution;
+
 			VS.Events.SolutionEvents.OnAfterOpenSolution += SolutionEvents_OnAfterOpenSolution;
 
 			VS.Events.SolutionEvents.OnAfterOpenProject += SolutionEvents_OnAfterOpenProject;
@@ -86,6 +95,18 @@ namespace BlitzVisualStudio
 			VS.Events.DocumentEvents.Opened += DocumentEvents_Opened;
 			VS.Events.DocumentEvents.Closed += DocumentEvents_Closed;
 			VS.Events.SelectionEvents.SelectionChanged += SelectionEvents_SelectionChanged;
+		}
+
+		bool isSolutionClosing = false;
+
+		private void SolutionEvents_OnBeforeCloseSolution()
+		{
+			isSolutionClosing = true;
+		}
+
+		private bool IsSolutionCurrent(string solutionName)
+		{
+			return _currentSolution.Equals(solutionName, StringComparison.OrdinalIgnoreCase);
 		}
 
 		private void SolutionEvents_OnAfterRenameProject(Community.VisualStudio.Toolkit.Project obj)
@@ -100,6 +121,7 @@ namespace BlitzVisualStudio
 
 		private void SolutionEvents_OnAfterOpenSolution(Community.VisualStudio.Toolkit.Solution obj)
 		{
+			isSolutionClosing = false;
 			HandleOpenSolution();
 		}
 
@@ -122,6 +144,10 @@ namespace BlitzVisualStudio
 
 		private void SendActiveFilesList(string file = null)
 		{
+			if(isSolutionClosing)
+			{
+				return;
+			}
 			ThreadHelper.JoinableTaskFactory.Run(async delegate {
 
 				var solution = await VS.Solutions.GetCurrentSolutionAsync();
@@ -153,7 +179,7 @@ namespace BlitzVisualStudio
 				activeFiles.ActiveFiles = files.ToList();
 
 				var fileText = System.Text.Json.JsonSerializer.Serialize(activeFiles);
-				WriteIpcMessage("VS_ACTIVE_FILES", fileText);
+				WriteIpcMessage($"VS_ACTIVE_FILES,{_currentSolution},{_solutionPathID}", fileText);
 			});
 		}
 
@@ -191,7 +217,7 @@ namespace BlitzVisualStudio
 						BelongsToSolution = solution.FullPath
 					};
 					var fileText = System.Text.Json.JsonSerializer.Serialize<SelectedProjectExport>(export);
-					WriteIpcMessage("VS_PROJECT", fileText);
+					WriteIpcMessage($"VS_PROJECT,{_currentSolution},{_solutionPathID}", fileText);
 					break;
 				}
 			}
@@ -205,7 +231,8 @@ namespace BlitzVisualStudio
 
 		public void HandleOpenSolution(object sender = null, EventArgs e = null)
 		{
-			ThreadHelper.JoinableTaskFactory.Run(async delegate { 
+			ThreadHelper.JoinableTaskFactory.Run(async delegate 
+			{ 
 				var solution = await VS.Solutions.GetCurrentSolutionAsync();
 
 				if (solution == null)
@@ -216,6 +243,8 @@ namespace BlitzVisualStudio
 				var projects = await VS.Solutions.GetAllProjectsAsync();
 				var projectCollection = new List<Project>();
 				var solutionExport = new SolutionExport() { Name = solution.FullPath, Projects = projectCollection };
+				_currentSolution = Path.GetFileNameWithoutExtension(solution.FullPath);
+				_solutionPathID = Md5(solution.FullPath);
 
 				foreach (Community.VisualStudio.Toolkit.Project project in projects)
 				{
@@ -227,10 +256,18 @@ namespace BlitzVisualStudio
 				}
 
 				var fileText = System.Text.Json.JsonSerializer.Serialize<SolutionExport>(solutionExport);
-				WriteIpcMessage("VS_SOLUTION", fileText);
+				WriteIpcMessage($"VS_SOLUTION,{_currentSolution},{_solutionPathID}", fileText);
 			});
 		}
-
+		public static string Md5(string input, bool isLowercase = false)
+		{
+			using (var md5 = MD5.Create())
+			{
+				var byteHash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+				var hash = BitConverter.ToString(byteHash).Replace("-", "");
+				return (isLowercase) ? hash.ToLower() : hash;
+			}
+		}
 		private void RecursiveGetFiles( HashSet<string> files, SolutionItem item)
 		{
 			if(item.Type == SolutionItemType.PhysicalFile)
@@ -286,11 +323,34 @@ namespace BlitzVisualStudio
 					}
 				}
 			}
+			var setSearchboxWithContext = new SetSearchBoxContext
+			{
+				ProcessId = System.Diagnostics.Process.GetCurrentProcess().Id,
+				EditorId = new SolutionID
+				{
+					Identity = _solutionPathID,
+					Title = _currentSolution
+				},
+				SearchBoxString = text
+			};
 
-			string blitzPath = GetBlitzPath();
+			string jsonString = System.Text.Json.JsonSerializer.Serialize(setSearchboxWithContext);
 			BlitzInstallCheck();
-			WriteIpcMessage(commandName, text);
+			WriteIpcMessage(commandName, jsonString);
 			BootStrapBlitz();
+		}
+
+		public class SolutionID
+		{
+			public string Title { get; set; } = string.Empty;
+			public string Identity { get; set; } = string.Empty;
+		}
+
+		public class SetSearchBoxContext
+		{
+			public int ProcessId { get; set; }
+			public SolutionID EditorId { get; set; } = null;
+			public string SearchBoxString { get; set; } = string.Empty;
 		}
 
 		public void WriteIpcMessage( string commandName,  string text)
@@ -303,6 +363,7 @@ namespace BlitzVisualStudio
 				try
 				{
 					File.WriteAllText(fullPath, text);
+					return;
 				}
 				catch 
 				{

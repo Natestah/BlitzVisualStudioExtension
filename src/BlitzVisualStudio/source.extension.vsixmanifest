@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.94" Language="en-US" Publisher="Nathan Silvers" />
+        <Identity Id="BlitzVisualStudio.1e7f8bac-be29-45e3-80f9-e9ea93f35079" Version="1.97" Language="en-US" Publisher="Nathan Silvers" />
         <DisplayName>Blitz Search</DisplayName>
-        <Description xml:space="preserve">Blitz Search aims to be a full replacement for Find-in-Files And Replace in files.   Offering Syntax Highlighting, Real time updates, Replace-in-files, theme support, and more.  
-
-100% free and open source, a passion project for my Fellow Devs.  Blitz Search is a standalone application that bridges work between Visual Studio, VS Code, and other Text edtiors.  It's the perfect solution for managing search outside of the current scope.</Description>
-        <MoreInfo>https://natestah.com</MoreInfo>
-        <GettingStartedGuide>https://natestah.com/blog/f/blitz-search-with-visual-studio</GettingStartedGuide>
-        <ReleaseNotes>Launch Blitz Search even when there are no active documents</ReleaseNotes>
+        <Description xml:space="preserve">Find/Replace in Files++</Description>
+        <MoreInfo>https://github.com/natestah/blitzSearch/</MoreInfo>
+        <ReleaseNotes>Supporting multiple instances of Visual Studio better.</ReleaseNotes>
         <Icon>BlitzIcon.ico</Icon>
         <PreviewImage>NewBlitzPng.png</PreviewImage>
-        <Tags>Code Search Replace Text Tool</Tags>
+        <Tags>Code Search Replace Text Tool Find FIles</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
